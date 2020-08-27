@@ -1,0 +1,15 @@
+{
+    "owners":
+        [
+            "405801436534931457",
+            "294913372586115074"
+        ],
+    "roleMessage": "",
+    "verificationMessage":"",
+    "reactionMessages": {
+        "message_id": {
+            "hola":"test"
+        }
+    },
+    "token":"SAS"
+ }
