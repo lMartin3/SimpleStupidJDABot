@@ -20,6 +20,7 @@ public class BotConfiguration {
 
     private String verificationRole = "623640446677155861";
     private String muteRole = "748544829755228200";
+    private String vcMuteRole = "748559979753242684";
 
     private String verificationMessage = "746577001632235620";
     private String verificationEmoji = "☑️";
