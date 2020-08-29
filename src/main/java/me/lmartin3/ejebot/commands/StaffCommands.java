@@ -64,6 +64,38 @@ public class StaffCommands {
         getPunishmentChannel().sendMessage(builder.build()).queue();
     }
 
+    @BotCommand(name = "kick", description = "Kickear a un usuario", permission = Permission.KICK_MEMBERS)
+    public void kickCommand(Message message, String[] arguments) {
+        User mentioned = getMentionedUser(message);
+        if(mentioned==null) {
+            message.getChannel().sendMessage(":x: ¡Tenés que mencionar a un usuario!").queue();
+            return;
+        }
+        String reason = getReason(1, arguments);
+        EmbedBuilder builder = new EmbedBuilder();
+        builder
+                .setTitle("⛔ » Kick")
+                .setDescription(mentioned.getAsTag() + " ha sido kickeado.")
+                .addField("Motivo:", reason, false)
+                .addField("Kickeado por:",message.getAuthor().getAsTag(), false)
+                .addField("ID: ", mentioned.getId(), false)
+        ;
+        Runnable continueKick = ()->{
+            message.getChannel().sendMessage(mentioned.getAsMention() + " ha sido kickeado.").queue();
+            message.getChannel().sendMessage(builder.build()).queue();
+            getPunishmentChannel().sendMessage(builder.build()).queue();
+            message.getGuild().kick(mentioned.getId(), reason).queue();
+        };
+        mentioned.openPrivateChannel().queue((pc)->{
+            pc.sendMessage("¡Has sido expulsado de " + message.getGuild().getName() + "!").queue((m)->{
+                pc.sendMessage(builder.build()).queue(); });
+            continueKick.run();
+        }, (x)-> {
+            continueKick.run();
+        });
+
+    }
+
     @BotCommand(name = "unmute", description = "Desmutear a un usuario", permission = Permission.KICK_MEMBERS)
     public void unmuteCommand(Message message, String[] arguments) {
         User mentioned = getMentionedUser(message);
@@ -154,7 +186,7 @@ public class StaffCommands {
         getPunishmentChannel().sendMessage(builder.build()).queue();
     }
 
-    @BotCommand(name = "react", description = "React to a message", permission = Permission.KICK_MEMBERS)
+    @BotCommand(name = "react", description = "React to a message", onlyCreators = true)
     public void reactCommand(Message message, String[] arguments) {
         if(arguments.length < 2) {
             message.getChannel().sendMessage(":x: Debes especificar un mensaje al cual reaccionar y una reacción").queue();
