@@ -84,6 +84,7 @@ public class Commands {
         int random = ThreadLocalRandom.current().nextInt(0, urls.size()); //number between 0 and urls.size() -1
 
         Document hdImage = getHtmlDocument("https://rule34.xxx/" + urls.get(random));
+        if(hdImage==null) { message.getChannel().sendMessage(":x: Error").queue(); return; }
         String result = hdImage.getElementById("image").attr("src");
         System.out.println(urls.get(random));
         message.getChannel().sendMessage(new EmbedBuilder().setImage(result).build()).queue();
