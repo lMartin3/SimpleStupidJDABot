@@ -125,7 +125,7 @@ public class StaffCommands {
         getPunishmentChannel().sendMessage(builder.build()).queue();
     }
 
-    @BotCommand(name = "vcunmute", description = "Desmutear a un usuario", permission = Permission.KICK_MEMBERS)
+    @BotCommand(name = "vcunmute", description = "Desmutear a un usuario de VC", permission = Permission.KICK_MEMBERS)
     public void vcUnmuteCommand(Message message, String[] arguments) {
         User mentioned = getMentionedUser(message);
         if(mentioned==null) {
@@ -152,6 +152,26 @@ public class StaffCommands {
         ;
         message.getChannel().sendMessage(builder.build()).queue();
         getPunishmentChannel().sendMessage(builder.build()).queue();
+    }
+
+    @BotCommand(name = "react", description = "React to a message", permission = Permission.KICK_MEMBERS)
+    public void reactCommand(Message message, String[] arguments) {
+        if(arguments.length < 2) {
+            message.getChannel().sendMessage(":x: Debes especificar un mensaje al cual reaccionar y una reacción").queue();
+        } else {
+            message.getChannel().getHistoryFromBeginning(100).queue(mh->{
+                for(Message m : mh.getRetrievedHistory()) {
+                    if(m.getId().equalsIgnoreCase(arguments[0])) {
+                        m.addReaction(arguments[1]).queue((v)->{
+                            message.getChannel().sendMessage(":white_check_mark: Hecho.").queue();
+                        });
+                        return;
+                    }
+                }
+                message.getChannel().sendMessage(":x: Mensaje no encontrado.").queue();
+            });
+
+        }
     }
 
 

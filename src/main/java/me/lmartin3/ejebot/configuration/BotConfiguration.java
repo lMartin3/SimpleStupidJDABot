@@ -40,9 +40,14 @@ public class BotConfiguration {
         eje.put("\uD83D\uDD35", "745715208147828747"); //GMOD
         eje.put("🔻", "745715211297882114"); //VALORANT 0xD83D 0xDD3D
         eje.put("🧙", "745715213298434170"); //LOL
+        eje.put("🔎", "749130615504502784"); //AMONG US
 
+        Map<String, String> others = new HashMap<>();
+        others.put("🔞", "747247950031355996");
+        others.put("📰", "749380306758270995");
         reactionMessages = new HashMap<>();
         reactionMessages.put("745716308267630602", eje);
+        reactionMessages.put("749373199447228517", others);
     }
 
     public boolean isOwner(String id) {
