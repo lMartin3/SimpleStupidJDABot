@@ -88,8 +88,8 @@ public class StaffCommands {
         };
         mentioned.openPrivateChannel().queue((pc)->{
             pc.sendMessage("¡Has sido expulsado de " + message.getGuild().getName() + "!").queue((m)->{
-                pc.sendMessage(builder.build()).queue(); });
-            continueKick.run();
+                pc.sendMessage(builder.build()).queue(v->continueKick.run());
+            });
         }, (x)-> {
             continueKick.run();
         });

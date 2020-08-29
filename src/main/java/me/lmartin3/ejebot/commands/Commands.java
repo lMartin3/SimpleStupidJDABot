@@ -28,12 +28,12 @@ public class Commands {
         builder.setFooter("Por cualquier duda, comuníquese con un administrador.");
         builder.setThumbnail(bot.getJda().getSelfUser().getAvatarUrl());
         bot.getCommandLoader().commands.values().stream().map(CommandLoader.RegisteredCommand::getAnnotation).forEach((bc) -> {
-            builder.addField(bc.name(), bc.description(), false);
+            builder.addField(bc.name(), bc.description(), true);
         });
         message.getChannel().sendMessage(builder.build()).queue();
     }
 
-    @BotCommand(name = "about", description = "Mostrar una lista de comandos")
+    @BotCommand(name = "about", description = "Acerca del bot")
     public void aboutCommand(Message message, String[] arguments) {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setTitle("Acerca del bot");
