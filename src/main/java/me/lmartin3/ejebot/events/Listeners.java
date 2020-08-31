@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageDeleteEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
@@ -18,6 +19,18 @@ public class Listeners extends ListenerAdapter {
     public Listeners(EjeBot bot) {
         this.bot = bot;
         bot.getJda().addEventListener(this);
+    }
+
+    @Override
+    public void onGuildMessageReceived(GuildMessageReceivedEvent e) {
+        if(e.getChannel().getId().equalsIgnoreCase(bot.getBotConfiguration().getSuggestionsChannel())) {
+            Emote approveEmote = e.getChannel().getGuild().getEmoteById("749955884389498892");
+            Emote denyEmote = e.getChannel().getGuild().getEmoteById("749955884796608582");
+            if(approveEmote==null||denyEmote==null) return;
+            e.getMessage().addReaction(approveEmote).queue(z->{
+                e.getMessage().addReaction(denyEmote).queue();
+            });
+        }
     }
 
     @Override

@@ -17,6 +17,7 @@ public class BotConfiguration {
     private String logChannel = "745654076552904814";
     private String statsChannel = "747250241845067847";
     private String punishmentsChannel = "748545800287551548";
+    private String suggestionsChannel = "749783619630923846";
 
     private String verificationRole = "623640446677155861";
     private String muteRole = "748544829755228200";
