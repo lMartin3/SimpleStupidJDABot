@@ -15,6 +15,9 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 
 import javax.security.auth.login.LoginException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.stream.Collectors;
 
 @Getter
 public class EjeBot {
@@ -56,12 +59,24 @@ public class EjeBot {
                 },
                 1000*10
         );
+        /*
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("hello");
+            }
+        };
+        timer.schedule(task,0,3000);
+         */
     }
 
     public void updateStatsChannel() {
         System.out.println("Updating stats channel... channel: " + botConfiguration.getStatsChannel());
         VoiceChannel channel = jda.getVoiceChannelById("747250241845067847");
         if(channel==null) { System.out.println("Channel is null"); return; }
-        channel.getManager().setName("┆\uD83D\uDC65┆ Usuarios: " + channel.getGuild().getMembers().size()).queue();
+        channel.getManager().setName("┆\uD83D\uDC65┆ Usuarios: " +
+                (int) channel.getGuild().getMembers().stream().filter(m -> !m.getUser().isBot()).count()
+        ).queue();
     }
 }
