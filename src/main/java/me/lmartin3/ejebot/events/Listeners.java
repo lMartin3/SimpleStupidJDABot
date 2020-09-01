@@ -1,6 +1,9 @@
 package me.lmartin3.ejebot.events;
 
 import me.lmartin3.ejebot.EjeBot;
+import me.lmartin3.ejebot.moderation.PunishUtils;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberLeaveEvent;
@@ -13,9 +16,12 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class Listeners extends ListenerAdapter {
     private EjeBot bot;
+    private Pattern invitationPattern1 = Pattern.compile("discord.gg\\/[A-z0-9]{1,6}");
+    private Pattern invitationPattern2 = Pattern.compile("discord.com\\/invite\\/[A-z0-9]{1,6}");
     public Listeners(EjeBot bot) {
         this.bot = bot;
         bot.getJda().addEventListener(this);
@@ -26,10 +32,33 @@ public class Listeners extends ListenerAdapter {
         if(e.getChannel().getId().equalsIgnoreCase(bot.getBotConfiguration().getSuggestionsChannel())) {
             Emote approveEmote = e.getChannel().getGuild().getEmoteById("749955884389498892");
             Emote denyEmote = e.getChannel().getGuild().getEmoteById("749955884796608582");
-            if(approveEmote==null||denyEmote==null) return;
-            e.getMessage().addReaction(approveEmote).queue(z->{
-                e.getMessage().addReaction(denyEmote).queue();
-            });
+            if (approveEmote != null && denyEmote != null) {
+                e.getMessage().addReaction(approveEmote).queue(z -> {
+                    e.getMessage().addReaction(denyEmote).queue();
+                });
+            }
+        }
+
+
+
+        //antispam
+        Member member = e.getMessage().getMember();
+        if(member==null) return;
+        if(member.hasPermission(Permission.ADMINISTRATOR)) return;
+        if(invitationPattern1.matcher(e.getMessage().getContentRaw()).find()
+        || invitationPattern2.matcher(e.getMessage().getContentRaw()).find()) {
+            e.getMessage().delete().queue();
+            e.getChannel().sendMessage(e.getMessage().getAuthor().getAsMention() + " ¡No envíes invitaciones!").queue();
+            EmbedBuilder builder = new EmbedBuilder();
+            builder
+                    .setTitle("⚠️» Advertencia")
+                    .setDescription(e.getMessage().getAuthor().getAsTag() + " ha sido advertido.")
+                    .addField("Motivo:", "Violación de la regla 4", false)
+                    .addField("Advertido por:","Eje AutoMod", false)
+                    .addField("ID: ", e.getMessage().getAuthor().getId(), false)
+            ;
+            e.getMessage().getChannel().sendMessage(builder.build()).queue();
+            PunishUtils.getPunishmentChannel(bot).sendMessage(builder.build()).queue();
         }
     }
 
