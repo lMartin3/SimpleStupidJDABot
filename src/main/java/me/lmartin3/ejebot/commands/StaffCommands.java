@@ -37,6 +37,24 @@ public class StaffCommands {
         getPunishmentChannel().sendMessage(builder.build()).queue();
     }
 
+    @BotCommand(name = "applyrole", description = "Aplicar un rol a todos los usuarios", permission = Permission.ADMINISTRATOR)
+    public void applyRoleCommand(Message message, String[] arguments) {
+        if(arguments.length < 1) {
+            message.getChannel().sendMessage(":x: Tenés que poner la ID del rol.").queue();
+            return;
+        }
+        Role role = message.getGuild().getRoleById(arguments[0]);
+        if(role==null) {
+            message.getChannel().sendMessage(":x: Error: ese rol no existe.").queue();
+            return;
+        }
+        message.getChannel().sendMessage("Asignando rol a todos los usuarios...").queue(m->{
+            for(Member mb : message.getGuild().getMembers()) {
+                message.getGuild().addRoleToMember(mb, role).queue();
+            }
+        });
+    }
+
     @BotCommand(name = "mute", description = "Mutear a un usuario", permission = Permission.KICK_MEMBERS)
     public void muteCommand(Message message, String[] arguments) {
         User mentioned = getMentionedUser(message);
