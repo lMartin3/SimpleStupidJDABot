@@ -36,7 +36,7 @@ public class EjeBot {
             //jda = JDABuilder.createDefault(botConfiguration.getToken()).build();
             jda = new JDABuilder(AccountType.BOT).setToken(botConfiguration.getToken()).build();
             System.out.println("Logged in");
-        } catch (LoginException e) {
+        } catch (LoginException | NullPointerException e) {
             System.out.println("Error logging in with JDA");
             e.printStackTrace();
             return;

@@ -10,6 +10,8 @@ repositories {
     mavenCentral()
     jcenter()
 }
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 dependencies {
     compile 'net.dv8tion:JDA:4.1.1_108'
@@ -20,6 +22,10 @@ dependencies {
 
     testCompileOnly 'org.projectlombok:lombok:1.18.12'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
 jar {

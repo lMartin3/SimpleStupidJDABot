@@ -46,6 +46,7 @@ public class BotConfiguration {
         Map<String, String> others = new HashMap<>();
         others.put("🔞", "747247950031355996");
         others.put("📰", "749380306758270995");
+        others.put("\uD83D\uDCB8", "764262796468551690");
         reactionMessages = new HashMap<>();
         reactionMessages.put("745716308267630602", eje);
         reactionMessages.put("749373199447228517", others);
